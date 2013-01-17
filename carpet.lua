@@ -3,7 +3,7 @@
 local lgi = require 'lgi'
 local cairo = lgi.cairo
 local math = require 'math'
-require("hsltorgb")
+local HSLtoRGB = require("hsltorgb").toRGB
 
 local width = 960
 local height = width

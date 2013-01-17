@@ -1,8 +1,6 @@
 #!/usr/bin/env lua
 
-local math = require 'math'
-
-function HSLtoRGB(H, S, L)
+local function toRGB(H, S, L)
         local H,S,L = H,S,L
         while H > 360 do
                 H=H-360
@@ -30,3 +28,6 @@ function HSLtoRGB(H, S, L)
         return r,g,b
 end
 
+return {
+	toRGB=toRGB,
+}
