@@ -1,5 +1,5 @@
 fractal
 =======
 
-fractal rendering with lua and cairo
+fractal rendering with lua and cairo.
 requires `lua-lgi`.
