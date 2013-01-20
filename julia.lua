@@ -2,16 +2,28 @@
 
 local lgi = require 'lgi'
 local cairo = lgi.cairo
-local math = require 'math'
+local get_opts = require('alt_getopt').get_opts
 local HSLtoRGB = require("hsltorgb").toRGB
 
-local width = 1680
-local height = width
-local surface = cairo.ImageSurface.create('ARGB32', width, height)
-local cr = cairo.Context.create(surface)
+local sh_opts = "w:h:R:I:x:X:ni:s:"
 
-local offs = 257
-local iter = 359 -- Max iterations. The higher, the more accurate, the slower.
+local long_opts ={
+	width = 1,
+	height = 1,
+	real = 1,
+	imaginary = 1,
+	xmin = 1,
+	xmax = 1,
+	negative = 0,
+	iterations = 1,
+	startangle = 1,
+}
+
+local width = 640
+local height = 480
+
+local iter = 360 -- Max iterations. The higher, the more accurate, the slower.
+local startangle = 270
 local c = {
 	re = -0.4,
 	im = 0.6,
@@ -24,11 +36,48 @@ local borders = {
 		min = -1.6,
 		max = 1.6,
 	},
-	y = {
-		min = -1.6,
-		max = 1.6,
-	},
 }
+
+local colorizer = 0
+
+function recolor()
+	colorizer = 360 / iter
+end
+
+local retargs,ind = get_opts(arg, sh_opts, long_opts)
+for k,v in pairs(retargs) do
+	if k == "w" or k == "width" then
+		width = v
+	elseif k == "h" or k == "height" then
+		height = v
+	elseif k == "R" or k == "real" then
+		c.re = v
+	elseif k == "I" or k == "imaginary" then
+		c.im = v
+	elseif k == "x" or k == "xmin" then
+		borders.x.min = v
+	elseif k == "X" or k == "xmax" then
+		borders.x.max = v
+	elseif k == "n" or k == "negative" then
+		recolor()
+		colorizer = - colorizer
+	elseif k == "i" or k == "iterations" then
+		iter = v
+		recolor()
+	elseif k == "s" or k == "startangle" then
+		startangle = v
+	end
+end
+
+local bymin = borders.x.min * height / width
+local bymax = borders.x.max * height / width
+
+borders.y = {}
+borders.y.min = bymin
+borders.y.max = bymax
+
+local surface = cairo.ImageSurface.create('ARGB32', width, height)
+local cr = cairo.Context.create(surface)
 
 function draw(cr)
 	local H,S,L = 180,1,0.5
@@ -62,7 +111,7 @@ function julia(cr, width, height, iter, c)
 					break
 				end
 			end
-			local H = 270 - num
+			local H = startangle - colorizer * num
 			local r,g,b = HSLtoRGB(H,1,0.5)
 			cr:set_source_rgba(r,g,b,1)
 			local dx,dy = i * width / rangex, j * height / rangey
