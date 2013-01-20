@@ -5,7 +5,5 @@ fractal rendering with lua and cairo.
 requires `lua-lgi`.
 
 
-
-Invocation: lua <name>.lua
-
-Generates <name>.png as output file in the same folder.
+Invocation: lua NAME.lua. <br>
+Generates NAME.png as output file in the same folder.
