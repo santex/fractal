@@ -27,4 +27,4 @@ julia.lua takes these arguments:
 + -i, --iterations *iterations*
 	+ Defines max number of iterations over one point in the julia set. Also sets the number of individual colors. Should be somewhere between 0 and 360. Default: 360
 + -s, --startangle *angle*
-	Angle in degrees. Defines the starting color hue in the HSL colorset.
+	+ Angle in degrees. Defines the starting color hue in the HSL colorset.
