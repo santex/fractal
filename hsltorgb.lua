@@ -3,8 +3,11 @@
 local function toRGB(H, S, L)
         local H,S,L = H,S,L
         while H > 360 do
-                H=H-360
+                H = H-360
         end
+	while H < 0 do
+		H = H + 360
+	end
         local c = (1-math.abs(2*L-1))*S
         local h = H/60
         local x = c*(1-math.abs(h%2-1))
