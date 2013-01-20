@@ -2,7 +2,7 @@ fractal
 =======
 
 fractal rendering with lua and cairo.
-requires `lua-lgi`.
+requires `lua-lgi` and `alt-getopt`.
 
 
 Invocation: lua5.1 NAME.lua.   
